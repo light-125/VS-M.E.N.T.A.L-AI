@@ -1,5 +1,5 @@
 # 🧠 VS M.E.N.T.A.L AI — 究極の心理戦ロシアンルーレット
-(https://rawcdn.githack.com/light-125/VS-M.E.N.T.A.L-AI/6259d575efe3362cdd5fd8405be30b05605eb41c/index.html)[ここを押して遊ぶ]
+[ここを押して遊ぶ](https://rawcdn.githack.com/light-125/VS-M.E.N.T.A.L-AI/6259d575efe3362cdd5fd8405be30b05605eb41c/index.html)
 
 > **「その引き金は論理か、それとも狂気か。」**
 
