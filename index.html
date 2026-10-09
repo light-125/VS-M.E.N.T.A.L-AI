@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--　Copyright [2026] [light-125]　-->
+<html lang="ja" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="心理解析AIと対峙する究極の心理戦ロシアンルーレット。">
+    <title>VS M.E.N.T.A.L AI</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP&family=Noto+Color+Emoji&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #070908; --box: #121614; --acc: #00ff66; --err: #ff3333; --txt: #fff; }
+        body { text-align: center; font-family: 'Space Mono', 'LINE Seed JP', 'Noto Color Emoji', monospace; background: var(--bg); color: var(--txt); padding: 5px; user-select: none; }
+        body.f { background: rgba(255, 51, 51, 0.5); }
+        .c { max-width: 450px; margin: 5px auto; background: var(--box); padding: 15px; border: 3px solid var(--acc); border-radius: 8px; }
+        .g { display: flex; justify-content: space-around; background: #000; padding: 8px; border: 1px solid #444; margin: 10px 0; font-size: 13px; }
+        #log { font-size: 14px; min-height: 60px; background: #000; padding: 10px; text-align: left; border-left: 5px solid var(--err); margin: 10px 0; line-height: 1.4; }
+        button { font-size: 15px; padding: 10px 15px; margin: 4px; border: 2px solid var(--acc); background: transparent; color: var(--acc); font-weight: bold; border-radius: 6px; font-family: inherit; }
+        button:hover:not(:disabled) { background: var(--acc); color: #000; }
+        button:disabled { border-color: #333; color: #555; background: #151515; }
+        .it { border-color: #ffcc00; color: #ffcc00; font-size: 12px; padding: 4px 8px; }
+        .it:hover:not(:disabled) { background: #ffcc00; color: #000; }
+    </style>
+</head>
+<body>
+<div class="c">
+    <h3>🧠 VS 心理解析AI [M.E.N.T.A.L AI]</h3>
+    <div id="tm" style="font-size:24px; color:var(--err); font-weight:bold; height:30px;"></div>
+    <div id="ev" style="color:#ffcc00; font-weight:bold; font-size:12px;"></div>
+    <div class="g">
+        <div>プール:<br><b id="m_p" style="font-size:16px;">0</b>円</div>
+        <div>生存率:<br><b id="m_s" style="font-size:16px;">100%</b></div>
+        <div>残り穴:<br><b id="m_c" style="font-size:16px;">10</b>/10</div>
+    </div>
+    <div class="g">
+        <div>👤 あなた: <b id="m_pb" style="color:var(--acc);">0</b>円</div>
+        <div>🤖 AI: <b id="m_ab" style="color:var(--err);">0</b>円</div>
+    </div>
+    <div style="font-size:14px; margin:5px 0;">手番: <b id="trn" style="color:var(--err);">-</b></div>
+    <div>
+        <button id="i_s" class="it">👁️透視</button>
+        <button id="i_j" class="it">🛠️パス</button>
+        <button id="i_b" class="it">💬脅迫</button>
+    </div>
+    <div id="log">ゲーム開始</div>
+    <div>
+        <button id="b_s">💥 引き金を引く</button>
+        <button id="b_d">🏳️ ドロップ</button>
+        <button id="b_n" style="display:none;">⏭️ 次へ</button>
+    </div>
+    <div class="g" style="display:block; text-align:left; font-size:12px;">
+        称号: <b id="r_nk" style="color:#ffcc00;">新米</b> | R:<span id="s_r">0</span> | W:<span id="s_w">0</span>% | D:<span id="s_d">0</span> | Max:<span id="s_m">0</span>
+        <button id="b_r" style="font-size:9px; padding:1px 4px; border-color:#555; color:#888;">消去</button>
+    </div>
+</div>
+<footer>&copy;VS M.E.N.T.A.L AI</footer>
+<script>
+!function() {
+    'use strict';
+    const rnd = Math.random, jQ = jQuery;
+    const s = Object.seal({ pm: 1000, tc: 10, pb: 0, ab: 0, pT: true, ov: false, tt: 0, ts: 0, tv: 10, ti: null, md: 1, iS: true, iJ: true, iB: 0 });
+    let st = { r: 0, w: 0, d: 0, m: 0 };
+    const txt = {
+        ok: ["AI「生存確率は十分にある。計算通りだ」", "AIは冷酷に引き金に指をかけた。"],
+        ng: ["AI「プロセッサ警告。生存率が致命的だな…」", "AIのセンサーが激しく赤に明滅する。"],
+        t: ["AI「確率の底を覗くか？ 引き金を引きたまえ」", "AI「この死線で降りないとは、狂気だな」"]
+    };
+    const getRank = () => {
+        if (st.r < 3) return "新米";
+        if (st.d === 0 && st.r >= 5) return "不死鳥";
+        return (st.r > 0 ? (st.w / st.r) * 100 : 0) >= 50 ? "🎲博徒" : "👤市民";
+    };
+    const flash = () => { jQ("body").addClass("f"); setTimeout(() => jQ("body").removeClass("f"), 150); };
+    const load = () => { try { const v = localStorage.getItem("g_st"); if(v) st = JSON.parse(v); }catch(e){} viewSt(); };
+    const save = () => { try { localStorage.setItem("g_st", JSON.stringify(st)); }catch(e){} viewSt(); };
+    const viewSt = () => { jQ("#s_r").text(st.r); jQ("#s_w").text(st.r > 0 ? ((st.w / st.r) * 100).toFixed(1) : "0.0"); jQ("#s_d").text(st.d); jQ("#s_m").text(st.m.toLocaleString()); jQ("#r_nk").text(getRank()); };
+    const startTimer = () => {
+        clearInterval(s.ti); if (s.ov || !s.pT) { jQ("#tm").text(""); return; }
+        s.tv = s.md === 3 ? 4 : 10; jQ("#tm").text(`🚨 制限時間: ${s.tv}秒`);
+        s.ti = setInterval(() => {
+            s.tv--;
+            if (s.tv <= 0) { clearInterval(s.ti); jQ("#tm").text("⏰ 時間切れ！"); action(true, true); }
+            else { jQ("#tm").text(`🚨 制限時間: ${s.tv}秒`); }
+        }, 1000);
+    };
+    const view = () => {
+        jQ("#m_p").text(s.pm.toLocaleString()); jQ("#m_c").text(s.tc);
+        jQ("#m_s").text(s.tc > 0 ? (((s.tc - 1) / s.tc) * 100).toFixed(1) + "%" : "0%");
+        jQ("#m_pb").text(s.pb.toLocaleString()); jQ("#m_ab").text(s.ab.toLocaleString());
+        jQ("#trn").text(s.pT ? "あなた" : "AI思考中");
+        jQ("#b_s").prop("disabled", !s.pT || s.ov); jQ("#b_d").prop("disabled", s.ov);
+        jQ("#i_s").prop("disabled", !s.iS || !s.pT || s.ov); jQ("#i_j").prop("disabled", !s.iJ || !s.pT || s.ov); jQ("#i_b").prop("disabled", s.iB !== 0 || !s.pT || s.ov);
+    };
+    const action = (isS, isF) => {
+        if (s.ov) return; clearInterval(s.ti);
+        if (isS) {
+            s.tt++;
+            if (Math.floor(rnd() * s.tc) + 1 === 1) {
+                flash(); jQ("#log").html("<span style='color:var(--err);font-weight:bold;'>💥 被弾死亡！プール金の半分がAIへ没収。</span>");
+                s.ab += Math.floor(s.pm / 2); st.d++; end(); return;
+            }
+            s.ts++; s.tc--; s.pm *= (s.md === 2 ? 3 : 2);
+            jQ("#log").text((isF ? "【時間切れ強制】":"") + "…カチッ。生存！");
+            if (chk1()) return;
+            s.pT = false; view(); setTimeout(ai, 1200);
+        } else {
+            s.pb += s.pm; jQ("#log").text(`🏳️ ドロップ！ ${s.pm.toLocaleString()}円を獲得。`);
+            if(s.pm > st.m) st.m = s.pm; end();
+        }
+    };
+    const ai = () => {
+        if (s.ov || s.pT) return;
+        let pr = s.tt > 0 ? (s.ts / s.tt) : 0.5, dr = 1 / s.tc, th = 0.35 + ((1 - pr) * 0.3);
+        if (s.iB === 1) { th = 0.85; s.iB = 2; }
+        jQ("#log").text(dr > 0.4 ? txt.ng[Math.floor(rnd()*2)] : txt.ok[Math.floor(rnd()*2)]);
+        setTimeout(() => {
+            if (dr > th) {
+                s.ab += s.pm; jQ("#log").text(`🤖 AIドロップ！${s.pm.toLocaleString()}円を確保。`); end();
+            } else {
+                if (Math.floor(rnd() * s.tc) + 1 === 1) {
+                    flash(); jQ("#log").html("🤖 AI「💥 ドン！」<br><b style='color:var(--acc);'>AI被弾爆発！プール金はあなたのもの！</b>");
+                    s.pb += s.pm; if(s.pm > st.m) st.m = s.pm; end();
+                } else {
+                    s.tc--; s.pm *= (s.md === 2 ? 3 : 2);
+                    jQ("#log").text(`…カチッ。AI生存！\n${txt.t[Math.floor(rnd()*2)]}`);
+                    if (chk1()) return;
+                    s.pT = true; view(); startTimer();
+                }
+            }
+        }, 1300);
+    };
+    const chk1 = () => {
+        if (s.tc === 1) {
+            jQ("#log").html(jQ("#log").html() + "<br><b style='color:var(--err);'>⚠️残り1発（生存率10%）次弾確定のため折半終了。</b>");
+            let h = Math.floor(s.pm / 2); s.pb += h; s.ab += h; if(h > st.m) st.m = h; end(); return true;
+        }
+        return false;
+    };
+    const end = () => { s.ov = true; clearInterval(s.ti); jQ("#tm").text(""); st.r++; if (s.pb > s.ab) st.w++; save(); view(); jQ("#b_n").show(); };
+    jQ("#b_n").on("click", () => {
+        const r = rnd(); s.md = r < 0.2 ? 2 : (r < 0.4 ? 3 : 1);
+        s.pm = 1000; s.tc = 10; s.ov = false; s.iS = s.iJ = true; s.iB = 0; s.pT = rnd() < 0.5; s.pb = 0; s.ab = 0;
+        jQ("#ev").text(s.md === 2 ? "🔥【高レート】(賞金3倍)" : (s.md === 3 ? "🚨【極限】(タイマー4秒)" : ""));
+        jQ("#b_n").hide(); jQ("#log").text(s.pT ? "あなたのターン。" : "AIのターン。");
+        view(); if (s.pT) startTimer(); else setTimeout(ai, 1000);
+    });
+    jQ("#i_s").on("click", () => { if(!s.pT||s.ov||!s.iS) return; s.iS = false; jQ("#log").text(`👁️ 【透視】[ ${Math.floor(rnd()*s.tc)===0 ? "⚠️危険" : "✅安全"} ]`); view(); });
+    jQ("#i_j").on("click", () => { if(!s.pT||s.ov||!s.iJ) return; s.iJ = false; clearInterval(s.ti); s.pT = false; jQ("#log").text(`🛠️ 【パス】手番移行。`); view(); setTimeout(ai, 1200); });
+    jQ("#i_b").on("click", () => { if(!s.pT||s.ov||s.iB!==0) return; s.iB = 1; jQ("#log").text(`💬 【脅迫】AIを揺さぶった。`); view(); });
+    jQ("#b_s").on("click", () => { if(s.pT&&!s.ov) action(true, false); });
+    jQ("#b_d").on("click", () => { if(s.ov) return; if(!s.pT){ s.pb += Math.floor(s.pm/2); jQ("#log").text(`【降伏】半額獲得。`); end(); } else action(false, false); });
+    jQ("#b_r").on("click", () => { if(confirm("クリア？")) { st={r:0,w:0,d:0,m:0}; save(); } });
+    load(); view(); s.pT ? startTimer() : setTimeout(ai, 1000);
+}();
+</script>
+</body>
+</html>
